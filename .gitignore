@@ -1,4 +1,9 @@
-/kernel.bin
-boot.o
-boot.elf
-boot.bin
+*.i
+*.s
+*.o
+*.bc
+*.map
+*.dbg
+*.bin
+*.out
+*.elf

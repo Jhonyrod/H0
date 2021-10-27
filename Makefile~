@@ -4,7 +4,9 @@ DB=gdb-multiarch
 
 HOST=192.168.1.3
 
-DBFLAGS=-ex 'target remote $(HOST):1234' -ex 'set disassembly-flavor intel' -ex 'layout split'
+DBFLAGS=-ex 'set disassembly-flavor intel'\
+		-ex 'target remote $(HOST):1234'\
+		-ex 'layout asm'
 ASFLAGS=-f elf32 -gdwarf
 CCFLAGS=-I include -std=c2x -ffreestanding -nostdlib -nostdinc -nodefaultlibs -fno-pic -fno-builtin
 LDFLAGS=
@@ -15,8 +17,9 @@ QEMU=/mnt/c/Program\ Files/QEMU/qemu-system-i386.exe
 
 boot:		boot.asm
 	@$(AS) $(ASFLAGS) -o $@.o $<
-	ld -Ttext=0x7c00 -melf_i386 -o $@.elf $@.o
-	objcopy -O binary $@.elf $@.bin
+	@ld -Ttext=0x7c00 -melf_i386 -Map $@.map -o $@.dbg $@.o
+	@objcopy -O binary $@.dbg $@.bin
+	@objcopy --only-keep-debug $@.dbg
 
 kernel.bin:	$(TARGETS)
 	@$(CC) $(CCFLAGS) -Wl,--oformat=binary $^ -o $@
@@ -28,7 +31,7 @@ run:		boot
 	@$(QEMU) -monitor stdio $<.bin
 
 dbg:		boot
-	@$(QEMU) -s -S $<.bin & $(DB) $(DBFLAGS) $<.elf
+	@$(QEMU) -s -S $<.bin & $(DB) $(DBFLAGS) $<.dbg
 
 clean:
 	@rm -rf *.i *.s *.o *.bc *.map *.dbg *.bin *.out *.elf
