@@ -1,5 +1,6 @@
-;org 0x7C00
-bits 16
+use16
+global _start
+_start:
 	xor		ax,	ax
 	mov		ds,	ax
 	cli
@@ -18,6 +19,6 @@ reset:
 	int		0x13
 	jc		reset
 	jmp		0x7E00
-stack:
+padding:
 	times	$$+510-$	db 0
 dw		0xAA55

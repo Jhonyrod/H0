@@ -1,1 +1,4 @@
 /kernel.bin
+boot.o
+boot.elf
+boot.bin

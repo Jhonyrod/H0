@@ -5,17 +5,17 @@ DB=gdb-multiarch
 HOST=192.168.1.3
 
 DBFLAGS=-ex 'target remote $(HOST):1234' -ex 'set disassembly-flavor intel' -ex 'layout split'
-ASFLAGS=-f elf64 -gdwarf
+ASFLAGS=-f elf32 -gdwarf
 CCFLAGS=-I include -std=c2x -ffreestanding -nostdlib -nostdinc -nodefaultlibs -fno-pic -fno-builtin
 LDFLAGS=
 
 TARGETS=entry.c GDT.c memory.c
 
-QEMU=/mnt/c/Program\ Files/QEMU/qemu-system-x86-64.exe
+QEMU=/mnt/c/Program\ Files/QEMU/qemu-system-i386.exe
 
 boot:		boot.asm
 	@$(AS) $(ASFLAGS) -o $@.o $<
-	ld -Ttext=0x7c00 -o $@.elf $@.o
+	ld -Ttext=0x7c00 -melf_i386 -o $@.elf $@.o
 	objcopy -O binary $@.elf $@.bin
 
 kernel.bin:	$(TARGETS)
