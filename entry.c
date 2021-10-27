@@ -1,4 +1,3 @@
-#include <TSS.h>
 #include <GDT.h>
 
 void _start(void)

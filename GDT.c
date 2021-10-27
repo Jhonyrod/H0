@@ -1,5 +1,7 @@
 #include <GDT.h>
 
+const GDTEntry TSSD={.Accessed=true, .Executable=true, .Present=true};
+
 unsigned int SetGDTBA(GDTEntry *GDT, const size_t Address)
 {
 	if(Address>0xFFFFFFFF) return 1;

@@ -70,9 +70,11 @@ typedef __UINTPTR_TYPE__	uintptr_t;
 #ifndef true
 #define true 1
 #endif
+
 #ifndef false
 #define false 0
 #endif
+
 typedef _Bool bool;
 
 #endif
